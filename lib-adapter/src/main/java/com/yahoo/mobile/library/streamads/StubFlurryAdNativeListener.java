@@ -49,4 +49,10 @@ public abstract class StubFlurryAdNativeListener implements FlurryAdNativeListen
 
     @Override
     public void onShowFullscreen(FlurryAdNative flurryAdNative) { }
+
+    @Override
+    public void onCollapsed(FlurryAdNative flurryAdNative) { }
+
+    @Override
+    public void onExpanded(FlurryAdNative flurryAdNative) { }
 }

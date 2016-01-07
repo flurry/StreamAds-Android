@@ -75,11 +75,6 @@ public class SampleListFragment extends ListFragment implements NativeAdAdapter.
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
 

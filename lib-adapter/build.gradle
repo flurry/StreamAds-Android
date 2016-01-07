@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "20.0.0"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         minSdkVersion 10
@@ -25,15 +25,14 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.0.0'
-    compile 'com.android.support:recyclerview-v7:23.0.0'
-    compile 'com.android.support:support-annotations:23.0.0'
-    compile 'com.google.android.gms:play-services-ads:7.8.0'
-    compile files('libs/FlurryAnalytics-6.0.0.jar', 'libs/FlurryAds-6.0.0.jar')
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
+    compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile 'com.flurry.android:ads:6.2.0'
 
     testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.0.13-beta'
-    testCompile('org.robolectric:robolectric:3.0-rc3') {
+    testCompile 'org.mockito:mockito-core:2.0.36-beta'
+    testCompile('org.robolectric:robolectric:3.0') {
         exclude group: 'commons-logging', module: 'commons-logging'
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }

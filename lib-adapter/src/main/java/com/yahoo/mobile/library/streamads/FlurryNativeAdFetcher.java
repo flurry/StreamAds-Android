@@ -218,8 +218,6 @@ class FlurryNativeAdFetcher {
     FlurryAdNativeListener internalListener = new FlurryAdNativeListener() {
         @Override
         public void onFetched(FlurryAdNative flurryAdNative) {
-            Log.w(TAG, "onFetched");
-
             if (isAdUsable(flurryAdNative)) {
                 AD_QUEUE.addLast(flurryAdNative);
                 mFetchFailCount = 0;
@@ -276,6 +274,21 @@ class FlurryNativeAdFetcher {
         public void onImpressionLogged(FlurryAdNative flurryAdNative) {
             for (FlurryAdNativeListener listener : mExternalListeners) {
                 listener.onImpressionLogged(flurryAdNative);
+            }
+        }
+
+
+        @Override
+        public void onCollapsed(FlurryAdNative flurryAdNative) {
+            for (FlurryAdNativeListener listener : mExternalListeners) {
+                listener.onCollapsed(flurryAdNative);
+            }
+        }
+
+        @Override
+        public void onExpanded(FlurryAdNative flurryAdNative) {
+            for (FlurryAdNativeListener listener : mExternalListeners) {
+                listener.onExpanded(flurryAdNative);
             }
         }
 

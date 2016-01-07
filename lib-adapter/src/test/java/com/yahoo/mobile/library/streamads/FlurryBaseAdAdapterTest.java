@@ -89,8 +89,6 @@ public class FlurryBaseAdAdapterTest extends TestCase {
         doReturn(MOCK_AD_COUNT).when(mMockNativeAdFetcher).getQueuedAdsCount();
 
         assertEquals(MOCK_AD_COUNT, mFlurryBaseAdAdapter.getNumberOfAds(WRAPPED_ADAPTER_SIZE));
-
-        assertEquals(3, mFlurryBaseAdAdapter.getNumberOfAds(WRAPPED_ADAPTER_SIZE));
     }
 
     @Test
