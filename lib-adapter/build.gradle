@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 10
         targetSdkVersion 23
-        versionCode 1
-        versionName "0.10"
+        versionCode 2
+        versionName "1.0.0"
     }
 
     compileOptions {
@@ -25,10 +25,9 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:recyclerview-v7:23.1.1'
-    compile 'com.google.android.gms:play-services-ads:8.4.0'
-    compile 'com.flurry.android:ads:6.2.0'
+    provided 'com.android.support:appcompat-v7:23.1.1'
+    provided 'com.android.support:recyclerview-v7:23.1.1'
+    provided 'com.flurry.android:ads:6.2.0'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.0.36-beta'

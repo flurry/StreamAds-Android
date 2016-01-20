@@ -27,6 +27,8 @@ public class NativeAdViewBinder {
     private int mBrandingLogoImageId;
     private int mAppStarRatingImageId;
     private int mAdImageId;
+    private int mCallToActionViewId;
+    private int mAdCollapseViewId;
 
     NativeAdViewBinder() {
         // Prevent instantiation
@@ -58,6 +60,14 @@ public class NativeAdViewBinder {
 
     int getAdImageId() {
         return mAdImageId;
+    }
+
+    int getCallToActionViewId() {
+        return mCallToActionViewId;
+    }
+
+    int getAdCollapseViewId() {
+        return mAdCollapseViewId;
     }
 
     public final static class ViewBinderBuilder {
@@ -99,6 +109,16 @@ public class NativeAdViewBinder {
 
         public ViewBinderBuilder setAdImageId(@IdRes int adImageId) {
             mNativeAdViewBinder.mAdImageId = adImageId;
+            return this;
+        }
+
+        public ViewBinderBuilder setCallToActionViewId(@IdRes int adCTAViewId) {
+            mNativeAdViewBinder.mCallToActionViewId = adCTAViewId;
+            return this;
+        }
+
+        public ViewBinderBuilder setAdCollapseViewId(@IdRes int adCollapseViewId) {
+            mNativeAdViewBinder.mAdCollapseViewId = adCollapseViewId;
             return this;
         }
 

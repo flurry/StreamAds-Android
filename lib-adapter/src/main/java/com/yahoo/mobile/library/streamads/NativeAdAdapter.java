@@ -16,6 +16,11 @@
 
 package com.yahoo.mobile.library.streamads;
 
+import android.support.annotation.IntDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * <p>Interface for an adapter that renders ads interspersed between other application data.</p>
  *
@@ -24,6 +29,23 @@ package com.yahoo.mobile.library.streamads;
  * views could implement this interface.</p>
  */
 public interface NativeAdAdapter {
+
+    /**
+     * Ad views do not support toggling between expanded and collapsed.
+     */
+    public static final int EXPANDABLE_AD_MODE_OFF = 0;
+    /**
+     * Ad views in the adapter will start off as collapsed and support expansion toggling.
+     */
+    public static final int EXPANDABLE_AD_MODE_COLLAPSED = 1;
+    /**
+     * Ad views in the adapter will start off as expanded and support expansion toggling.
+     */
+    public static final int EXPANDABLE_AD_MODE_EXPANDED = 2;
+
+    @IntDef({EXPANDABLE_AD_MODE_OFF, EXPANDABLE_AD_MODE_COLLAPSED, EXPANDABLE_AD_MODE_EXPANDED})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface ExpandableAdMode {}
 
     /**
      * Refreshes the ads in the adapter

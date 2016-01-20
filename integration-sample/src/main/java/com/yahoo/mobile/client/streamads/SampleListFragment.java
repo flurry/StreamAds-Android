@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.flurry.android.ads.FlurryAdErrorType;
 import com.flurry.android.ads.FlurryAdNative;
 import com.flurry.android.ads.FlurryAdNativeListener;
-import com.flurry.android.ads.FlurryAdTargeting;
 
 import com.yahoo.mobile.client.streamads.sample.R;
 import com.yahoo.mobile.library.streamads.NativeAdAdapter;
@@ -45,10 +44,9 @@ public class SampleListFragment extends ListFragment implements NativeAdAdapter.
                 .setBrandingLogoImageId(R.id.sponsored_image)
                 .setAppStarRatingImageId(R.id.app_rating_image)
                 .setAdImageId(R.id.ad_image)
+                .setCallToActionViewId(R.id.ad_cta_btn)
+                .setAdCollapseViewId(R.id.ad_collapse_btn)
                 .build();
-
-        FlurryAdTargeting flurryAdTargeting = new FlurryAdTargeting();
-        flurryAdTargeting.setEnableTestAds(true);
 
         FlurryAdNativeListener adStateListener = new StubFlurryAdNativeListener() {
             @Override
@@ -61,9 +59,9 @@ public class SampleListFragment extends ListFragment implements NativeAdAdapter.
         FlurryAdListAdapter adListAdapter = FlurryAdListAdapter
                 .from(getActivity(), dataAdapter,  viewBinder, AD_SPACE)
                 .setAdPositioner(new LinearIntervalAdPositioner(3, 4))
-                .setTargeting(flurryAdTargeting)
                 .setFlurryAdNativeListener(adStateListener)
                 .setAutoDestroy(false)
+                .setExpandableAdMode(NativeAdAdapter.EXPANDABLE_AD_MODE_COLLAPSED)
                 .build();
 
         adListAdapter.addAdRenderListener(this);

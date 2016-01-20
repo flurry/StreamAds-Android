@@ -1,7 +1,6 @@
 # Flurry Stream Ads Helper Library
 
-Android library to help ad publishers easily integrate ads into their app streams. Currently still in
-development flux.
+Android library to help ad publishers easily integrate ads into their app streams.
 
 ## What this provides
 
@@ -88,6 +87,18 @@ is already on-screen.
 
 To disable this and render ads at all specified positions, call `NativeAdAdapter#setRetryFailedAdPositions(true)`
 
+For more help on the Flurry SDK, visit the 
+[Yahoo Developer Network documentation](https://developer.yahoo.com/flurry/docs/publisher/code/android/).
+
+## What's New
+
+### Version 1.2 (January 19, 2016)
+
+* Adds support for Flurry Expandable Ads in `ListView` streams. See the 
+[ListView sample](integration-sample/src/main/java/com/yahoo/mobile/client/streamads/SampleListFragment.java)
+for more.
+* Removes the Flurry SDK as a compile-time dependency in the library. You can now include your own 
+version of Flurry while including this library.
 
 ## Copyright
 

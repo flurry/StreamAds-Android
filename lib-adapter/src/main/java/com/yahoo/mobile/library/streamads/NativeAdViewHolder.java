@@ -37,6 +37,10 @@ class NativeAdViewHolder {
     ImageView appStarRatingImageView;
     @Nullable
     ImageView adImageView;
+    @Nullable
+    View callToActionView;
+    @Nullable
+    View adCollapseView;
 
     protected NativeAdViewHolder(@NonNull View parentView,
                                  @NonNull NativeAdViewBinder viewBinder) {
@@ -46,6 +50,8 @@ class NativeAdViewHolder {
         brandingLogoImageView = initView(parentView, viewBinder.getBrandingLogoImageId(), ImageView.class);
         appStarRatingImageView = initView(parentView, viewBinder.getAppStarRatingImageId(), ImageView.class);
         adImageView = initView(parentView, viewBinder.getAdImageId(), ImageView.class);
+        callToActionView = initView(parentView, viewBinder.getCallToActionViewId(), View.class);
+        adCollapseView = initView(parentView, viewBinder.getAdCollapseViewId(), View.class);
     }
 
     /**

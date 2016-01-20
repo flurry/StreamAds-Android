@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FlurryAdAdapter</string>
+    <string name="default_cta">Learn more</string>
+    <string name="collapse_ad">Collapse ▲</string>
 </resources>

@@ -88,4 +88,22 @@
         android:adjustViewBounds="true"
         android:scaleType="fitEnd"/>
 
+    <Button
+        android:id="@+id/ad_collapse_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_rating_image"
+        android:layout_marginTop="8dp"
+        android:text="@string/collapse_ad"/>
+
+    <Button
+        android:id="@+id/ad_cta_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_rating_image"
+        android:layout_marginTop="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/default_cta"/>
+
 </RelativeLayout>

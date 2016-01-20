@@ -57,6 +57,7 @@ class FlurryBaseAdAdapter {
     private String mAdSpaceName;
     private boolean mRetryFailedAdPositions;
     private boolean mAutoDestroyAds;
+    private @NativeAdAdapter.ExpandableAdMode int mExpandableAdMode;
 
     FlurryBaseAdAdapter(ListAdapterDataListener adapterDataListener) {
         if (!(adapterDataListener instanceof NativeAdAdapter)) {
@@ -299,6 +300,41 @@ class FlurryBaseAdAdapter {
      */
     void setAutoDestroy(boolean autoDestroy) {
         mAutoDestroyAds = autoDestroy;
+    }
+
+    /**
+     * <p>Sets the expanded mode that ads from this adapter should start in.</p>
+     *
+     * <p>Value should be one of:</p>
+     * <ul>
+     *     <li>{@link NativeAdAdapter#EXPANDABLE_AD_MODE_OFF} -
+     *          Default mode. Ad expansion toggling is not supported.</li>
+     *     <li>{@link NativeAdAdapter#EXPANDABLE_AD_MODE_EXPANDED} -
+     *          Ads start off in expanded mode and can be toggled.</li>
+     *     <li>{@link NativeAdAdapter#EXPANDABLE_AD_MODE_COLLAPSED} -
+     *          Ads start off in collapsed mode and can be toggled.</li>
+     * </ul>
+     * @param mode the expanded mode to set for all ads in the adapter
+     */
+    void setExpandableAdMode(@NativeAdAdapter.ExpandableAdMode int mode) {
+        mExpandableAdMode = mode;
+    }
+
+    /**
+     * Gets the expanded mode that ads from this adapter should start in.
+     *
+     * @return Value should be one of:
+     *          <ul>
+     *              <li>{@link NativeAdAdapter#EXPANDABLE_AD_MODE_OFF} -
+     *                      Default mode. Ad expansion toggling is not supported.</li>
+     *              <li>{@link NativeAdAdapter#EXPANDABLE_AD_MODE_EXPANDED} -
+     *                      Ads start off in expanded mode and can be toggled.</li>
+     *              <li>{@link NativeAdAdapter#EXPANDABLE_AD_MODE_COLLAPSED} -
+     *                      Ads start off in collapsed mode and can be toggled.</li>
+     *          </ul>
+     */
+    @NativeAdAdapter.ExpandableAdMode int getExpandableAdMode() {
+        return mExpandableAdMode;
     }
 
     /**

@@ -34,6 +34,7 @@ final class FlurryNativeAdViewBuilder {
     private static final String AD_ASSET_SEC_HQ_RATING_IMAGE = "secHqRatingImg";
     private static final String AD_ASSET_SEC_RATING_IMAGE = "secRatingImg";
     private static final String AD_ASSET_SHOW_RATING = "showRating";
+    private static final String AD_ASSET_CALL_TO_ACTION = "callToAction";
     private static final String AD_ASSET_SEC_HQ_IMAGE = "secHqImage";
     private static final String AD_ASSET_SEC_IMAGE = "secImage";
 
@@ -59,6 +60,7 @@ final class FlurryNativeAdViewBuilder {
         flurryAdNative.getAsset(AD_ASSET_SUMMARY).loadAssetIntoView(viewHolder.descriptionTextView);
         flurryAdNative.getAsset(AD_ASSET_HEADLINE).loadAssetIntoView(viewHolder.headlineTextView);
         flurryAdNative.getAsset(AD_ASSET_SOURCE).loadAssetIntoView(viewHolder.sourceTextView);
+        flurryAdNative.getAsset(AD_ASSET_CALL_TO_ACTION).loadAssetIntoView(viewHolder.callToActionView);
 
         // If ImageView is too large for smallest branding logo, use larger branding logo
         if (viewHolder.brandingLogoImageView != null &&

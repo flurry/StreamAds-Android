@@ -22,7 +22,7 @@ android {
 dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
-    compile (project(':lib-adapter')) {
-        exclude group: 'com.flurry.android', module: 'ads'
-    }
+    compile 'com.google.android.gms:play-services-base:8.4.0'
+    compile 'com.flurry.android:ads:6.2.0'
+    compile project(':lib-adapter')
 }

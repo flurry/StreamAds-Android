@@ -29,6 +29,7 @@ import com.flurry.android.ads.FlurryAdNative;
  */
 class FlurryAdViewHolder extends NativeAdViewHolder {
     @Nullable FlurryAdNative flurryAdNative;
+    View parentView;
 
     private FlurryAdViewHolder(@NonNull View parentView,
                                @NonNull NativeAdViewBinder viewBinder) {
@@ -39,6 +40,7 @@ class FlurryAdViewHolder extends NativeAdViewHolder {
                                           @NonNull NativeAdViewBinder viewBinder,
                                           @Nullable FlurryAdNative flurryAdNative) {
         FlurryAdViewHolder viewHolder = new FlurryAdViewHolder(parentView, viewBinder);
+        viewHolder.parentView = parentView;
         viewHolder.flurryAdNative = flurryAdNative;
 
         return viewHolder;

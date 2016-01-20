@@ -18,6 +18,7 @@ import com.flurry.android.ads.FlurryAdTargeting;
 
 import com.yahoo.mobile.client.streamads.sample.R;
 import com.yahoo.mobile.library.streamads.FlurryAdRecyclerAdapter;
+import com.yahoo.mobile.library.streamads.NativeAdAdapter;
 import com.yahoo.mobile.library.streamads.NativeAdViewBinder;
 import com.yahoo.mobile.library.streamads.StubFlurryAdNativeListener;
 import com.yahoo.mobile.library.streamads.positioning.LinearIntervalAdPositioner;

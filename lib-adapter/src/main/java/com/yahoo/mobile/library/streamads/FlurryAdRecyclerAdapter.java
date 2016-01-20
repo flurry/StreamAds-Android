@@ -195,6 +195,9 @@ public class FlurryAdRecyclerAdapter extends RecyclerView.Adapter implements Nat
         return mBaseAdAdapter.getNumberOfAds(mWrappedAdapter.getItemCount());
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public void setRetryFailedAdPositions(boolean retryFailedAdPositions) {
         mBaseAdAdapter.setRetryFailedAdPositions(retryFailedAdPositions);

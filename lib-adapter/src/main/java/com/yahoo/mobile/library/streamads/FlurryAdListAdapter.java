@@ -23,6 +23,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,10 +53,15 @@ public final class FlurryAdListAdapter extends BaseAdapter implements NativeAdAd
     private WeakReference<Context> mContextReference;
     private Adapter mWrappedAdapter;
     private NativeAdViewBinder mViewBinder;
+    private SparseArray<Boolean> mPositionExpandedMap;
+    private ExpandedAdListener mExpandedAdListener;
+    private boolean mAdListenerAttached;
 
     // Private to prevent external instantiation
     private FlurryAdListAdapter() {
         mBaseAdAdapter = new FlurryBaseAdAdapter(this);
+        mPositionExpandedMap = new SparseArray<>();
+        mExpandedAdListener = new ExpandedAdListener();
     }
 
     /**
@@ -133,18 +139,15 @@ public final class FlurryAdListAdapter extends BaseAdapter implements NativeAdAd
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View returnedView = null;
+        View returnedView;
         final int adViewType = mWrappedAdapter.getViewTypeCount();
 
         if (getItemViewType(position) == adViewType) {
+            int expandableAdMode = mBaseAdAdapter.getExpandableAdMode();
 
             FlurryAdNative flurryAdNative = mBaseAdAdapter.getAdForPosition(position);
             FlurryAdViewHolder adViewHolder;
 
-            /*
-            At this point of execution, flurryAdNative should never be null, but I've been
-            wrong before.
-             */
             if (flurryAdNative == null) {
                 Log.e(TAG, "Should not happen. Flurry ad should not be null at this point");
                 return convertView;
@@ -157,6 +160,11 @@ public final class FlurryAdListAdapter extends BaseAdapter implements NativeAdAd
 
                 adViewHolder = FlurryAdViewHolder.newInstance(convertView, mViewBinder,
                         flurryAdNative);
+
+                if (expandableAdMode != EXPANDABLE_AD_MODE_OFF && !mAdListenerAttached) {
+                    mBaseAdAdapter.addFlurryAdNativeListener(mExpandedAdListener);
+                    mAdListenerAttached = true;
+                }
                 convertView.setTag(adViewHolder);
             } else {
                 adViewHolder = (FlurryAdViewHolder) convertView.getTag();
@@ -166,8 +174,32 @@ public final class FlurryAdListAdapter extends BaseAdapter implements NativeAdAd
                 }
             }
 
-            flurryAdNative.setTrackingView(convertView);
+            mExpandedAdListener.setAdViewHolder(adViewHolder);
+            mExpandedAdListener.setPosition(position);
+
             FlurryNativeAdViewBuilder.buildAdIntoViews(flurryAdNative, adViewHolder);
+
+            switch (expandableAdMode) {
+                case EXPANDABLE_AD_MODE_OFF:
+                    flurryAdNative.setTrackingView(convertView);
+                    break;
+                case EXPANDABLE_AD_MODE_EXPANDED:
+                    if (mPositionExpandedMap.get(position) == null ||
+                            mPositionExpandedMap.get(position)) {
+                        expandAdView(adViewHolder);
+                    } else {
+                        collapseAdView(adViewHolder);
+                    }
+                    break;
+                case EXPANDABLE_AD_MODE_COLLAPSED:
+                    if (mPositionExpandedMap.get(position) == null ||
+                            !mPositionExpandedMap.get(position)) {
+                        collapseAdView(adViewHolder);
+                    } else {
+                        expandAdView(adViewHolder);
+                    }
+                    break;
+            }
 
             mBaseAdAdapter.notifyAdRendered(position);
 
@@ -234,9 +266,46 @@ public final class FlurryAdListAdapter extends BaseAdapter implements NativeAdAd
         return mBaseAdAdapter.getNumberOfAds(mWrappedAdapter.getCount());
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public void setRetryFailedAdPositions(boolean retryFailedAdPositions) {
         mBaseAdAdapter.setRetryFailedAdPositions(retryFailedAdPositions);
+    }
+
+    private void expandAdView(FlurryAdViewHolder adViewHolder) {
+        if (adViewHolder.callToActionView != null) {
+            adViewHolder.callToActionView.setVisibility(View.GONE);
+        }
+        if (adViewHolder.adCollapseView != null) {
+            adViewHolder.adCollapseView.setVisibility(View.VISIBLE);
+        }
+        if (adViewHolder.adImageView != null) {
+            adViewHolder.adImageView.setVisibility(View.VISIBLE);
+        }
+
+        if (adViewHolder.flurryAdNative != null) {
+            adViewHolder.flurryAdNative.setCollapsableTrackingView(adViewHolder.parentView,
+                    adViewHolder.adCollapseView);
+        }
+    }
+
+    private void collapseAdView(FlurryAdViewHolder adViewHolder) {
+        if (adViewHolder.callToActionView != null) {
+            adViewHolder.callToActionView.setVisibility(View.VISIBLE);
+        }
+        if (adViewHolder.adCollapseView != null) {
+            adViewHolder.adCollapseView.setVisibility(View.GONE);
+        }
+        if (adViewHolder.adImageView != null) {
+            adViewHolder.adImageView.setVisibility(View.GONE);
+        }
+
+        if (adViewHolder.flurryAdNative != null) {
+            adViewHolder.flurryAdNative.setExpandableTrackingView(adViewHolder.parentView,
+                    adViewHolder.callToActionView);
+        }
     }
 
     public static class Builder {
@@ -325,10 +394,45 @@ public final class FlurryAdListAdapter extends BaseAdapter implements NativeAdAd
         }
 
         /**
+         * <p>Sets the expanded mode that ads from this adapter should start in.</p>
+         *
+         * <p>Mode value should be one of:</p>
+         * <ul>
+         *     <li>{@link #EXPANDABLE_AD_MODE_OFF} -
+         *          Default mode. Ad expansion toggling is not supported.</li>
+         *     <li>{@link #EXPANDABLE_AD_MODE_EXPANDED} -
+         *          Ads start off in expanded mode and can be toggled.</li>
+         *     <li>{@link #EXPANDABLE_AD_MODE_COLLAPSED} -
+         *          Ads start off in collapsed mode and can be toggled.</li>
+         * </ul>
+         *
+         * <p>If you set any mode other than <code>EXPANDABLE_AD_MODE_OFF</code>, you must pass
+         * in a call-to-action view
+         * ({@link NativeAdViewBinder.ViewBinderBuilder#setCallToActionViewId(int)}) and a
+         * "collapse" button ({@link NativeAdViewBinder.ViewBinderBuilder#setAdCollapseViewId(int)}).
+         * </p>
+         *
+         * @param mode the expanded mode to set for all ads in the adapter
+         * @return a {@link FlurryAdListAdapter.Builder} instance
+         */
+        public Builder setExpandableAdMode(@ExpandableAdMode int mode) {
+            mFlurryAdapter.mBaseAdAdapter.setExpandableAdMode(mode);
+            return this;
+        }
+
+        /**
          * Builds the {@link FlurryAdListAdapter} with the current settings
          * @return the ready to use {@link FlurryAdListAdapter}
          */
         public FlurryAdListAdapter build() {
+            if (mFlurryAdapter.mBaseAdAdapter.getExpandableAdMode() != EXPANDABLE_AD_MODE_OFF &&
+                    (mFlurryAdapter.mViewBinder.getCallToActionViewId() <= 0 ||
+                    mFlurryAdapter.mViewBinder.getAdCollapseViewId() <= 0)) {
+                throw new IllegalStateException("If you are not passing EXPANDABLE_AD_MODE_OFF to " +
+                        "FlurryAdListAdapter.Builder#setExpandableAdMode(int), you should set a " +
+                        "call-to-action and collapse-ad View in your NativeAdViewBinder.");
+            }
+
             mFlurryAdapter.mBaseAdAdapter.setFetchListener(
                     new FlurryNativeAdFetcher.FetchListener() {
                         @Override
@@ -361,6 +465,32 @@ public final class FlurryAdListAdapter extends BaseAdapter implements NativeAdAd
         FlurryAdListAdapter buildWithMockAdFetcher(FlurryNativeAdFetcher mockFetcher) {
             mFlurryAdapter.mBaseAdAdapter.injectMockAdFetcher(mockFetcher);
             return build();
+        }
+    }
+
+    private class ExpandedAdListener extends StubFlurryAdNativeListener {
+        private FlurryAdViewHolder mAdViewHolder;
+        private int mPosition;
+
+
+        @Override
+        public void onExpanded(FlurryAdNative flurryAdParam) {
+            mPositionExpandedMap.put(mPosition, true);
+            expandAdView(mAdViewHolder);
+        }
+
+        @Override
+        public void onCollapsed(FlurryAdNative flurryAdParam) {
+            mPositionExpandedMap.put(mPosition, false);
+            collapseAdView(mAdViewHolder);
+        }
+
+        public void setAdViewHolder(FlurryAdViewHolder adViewHolder) {
+            mAdViewHolder = adViewHolder;
+        }
+
+        public void setPosition(int position) {
+            mPosition = position;
         }
     }
 }
