@@ -17,6 +17,7 @@
 package com.yahoo.mobile.library.streamads;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -401,6 +402,7 @@ class FlurryBaseAdAdapter {
      *
      * @param context the Activity context
      */
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void registerActivityLifecycleListener(final Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH &&
                 context instanceof Activity) {
