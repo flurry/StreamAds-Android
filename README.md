@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/flurry/StreamAds-Android.svg?branch=master)](https://travis-ci.org/flurry/StreamAds-Android)
+
 # Flurry Stream Ads Helper Library
 
 Android library to help ad publishers easily integrate ads into their app streams.
